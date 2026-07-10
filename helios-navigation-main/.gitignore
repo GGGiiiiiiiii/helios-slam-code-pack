@@ -1,0 +1,47 @@
+# ===== ROS / colcon build artifacts =====
+build/
+install/
+log/
+logs/
+devel/
+.catkin_tools/
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== C/C++ build =====
+*.o
+*.so
+*.a
+*.out
+
+# ===== Logs / temp =====
+*.log
+*.tmp
+*.bak
+
+# ===== 本地资料 / 参考包（保留在工作区，不进仓库） =====
+_local/
+lios/helios_导航交接文档/
+lios/helios_linorobot_ws/src/linorobot2_base/
+lios/helios_linorobot_ws/src/linorobot2_gazebo/
+lios/helios_linorobot_ws/src/linorobot2_navigation/
+
+# ===== ROS 调试产物 =====
+frames_*.gv
+frames_*.pdf
+
+# ===== Large archives / data (放本地 _local/，不进 git) =====
+*.rar
+*.zip
+*.bag
+*.db3
+*.pcd
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+*.swp
+.DS_Store

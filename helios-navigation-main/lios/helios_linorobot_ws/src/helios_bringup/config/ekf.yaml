@@ -1,0 +1,42 @@
+# robot_localization EKF 配置（真机：融合原生 odom + IMU）
+# 数据源（珞石汇总已确认）：
+#   - 原生里程计 /sr_amr_control/odom（nav_msgs/Odometry，约 3.33Hz，v1.3.0）
+#   - IMU /camera/gyro_accel/sample（头部 Orbbec Gemini 330，约 200Hz）
+# EKF 用高频 IMU 做预测、低频 odom 做校正，输出 /odometry/filtered + odom->base_footprint TF。
+#
+# 真机启用前仍需确认：
+#   1. /camera/gyro_accel/sample 消息类型确为 sensor_msgs/Imu。
+#   2. IMU 在头部 Orbbec 相机链上，EKF 需 TF 从 base_footprint 经 trunk/head 连到 IMU frame（非底盘 tof_*）。
+#   3. 启用 EKF 时 odom_publisher 设 publish_tf=false（TF 唯一发布者）。
+ekf_filter_node:
+  ros__parameters:
+    frequency: 20.0
+    two_d_mode: true              # 2D 导航
+    publish_tf: true
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_footprint   # 全工程统一 base_footprint
+    world_frame: odom            # 连续里程计融合，world=odom
+
+    # ---- 原生轮式里程计输入 ----
+    odom0: /sr_amr_control/odom   # 珞石 v1.3.0 原生 odom（约 3.33Hz）
+    odom0_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, true,
+                   false, false, false]
+    odom0_differential: false
+    odom0_relative: false
+    odom0_queue_size: 10
+
+    # ---- IMU 输入（Orbbec 相机，约 200Hz）----
+    imu0: /camera/gyro_accel/sample
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, true,
+                  true,  true,  false]
+    imu0_differential: false
+    imu0_relative: true
+    imu0_queue_size: 10
+    imu0_remove_gravitational_acceleration: true
